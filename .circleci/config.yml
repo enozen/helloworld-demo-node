@@ -1,15 +1,34 @@
 version: 2.1
 
-# Orbs sind wiederverwendbare Pakete, die komplexe Aufgaben vereinfachen
 orbs:
   docker: circleci/docker@2.1.0
 
-# Workflows definieren die Abfolge von Jobs
-workflows:
-  build_and_push_image:
-    jobs:
-      - docker/publish:
-          # Definiert den Namen und den Tag für das Docker-Image
-          resource_class: medium
+# Krijojmë një "job" tonin manual
+jobs:
+  build-and-push-docker-image:
+    # Përcaktojmë mjedisin ku do të ekzekutohet
+    executor: docker/docker
+    # Këtu vendosim klasën e burimeve, ku është e vlefshme!
+    resource_class: medium
+    steps:
+      # Hapi 1: Merr kodin nga depoja
+      - checkout
+
+      # Hapi 2: Konfiguron një mjedis të sigurt për Docker
+      - docker/setup_remote_docker
+
+      # Hapi 3: Ndërton imazhin Docker
+      - docker/build:
           image: '${DOCKERHUB_USERNAME}/hellonodejs'
           tag: 'latest'
+
+      # Hapi 4: Bën login dhe ngarkon imazhin në Docker Hub
+      - docker/push:
+          image: '${DOCKERHUB_USERNAME}/hellonodejs'
+          tag: 'latest'
+
+# Përcaktojmë rrjedhën e punës për të ekzekutuar job-in tonë manual
+workflows:
+  build-and-push-workflow:
+    jobs:
+      - build-and-push-docker-image
