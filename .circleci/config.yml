@@ -3,31 +3,24 @@ version: 2.1
 orbs:
   docker: circleci/docker@2.1.0
 
-# Krijojmë një "job" tonin manual
 jobs:
   build-and-push-docker-image:
-    # Përcaktojmë mjedisin ku do të ekzekutohet
+    # Ky executor përgatit automatikisht një mjedis me Docker të instaluar
     executor: docker/docker
-    # Këtu vendosim klasën e burimeve, ku është e vlefshme!
     resource_class: medium
     steps:
-      # Hapi 1: Merr kodin nga depoja
+      # Hapi 1: Merr kodin
       - checkout
 
-      # Hapi 2: Konfiguron një mjedis të sigurt për Docker
-      - docker/setup_remote_docker
+      # Hapi 2: Bën login në Docker Hub (HAPI I RËNDËSISHËM QË MUNGONTE)
+      # Kjo komandë përdor variablat e mjedisit DOCKERHUB_USERNAME dhe DOCKERHUB_TOKEN
+      - docker/check
 
-      # Hapi 3: Ndërton imazhin Docker
-      - docker/build:
+      # Hapi 3: Ndërton dhe ngarkon imazhin
+      - docker/build-and-push:
           image: '${DOCKERHUB_USERNAME}/hellonodejs'
           tag: 'latest'
 
-      # Hapi 4: Bën login dhe ngarkon imazhin në Docker Hub
-      - docker/push:
-          image: '${DOCKERHUB_USERNAME}/hellonodejs'
-          tag: 'latest'
-
-# Përcaktojmë rrjedhën e punës për të ekzekutuar job-in tonë manual
 workflows:
   build-and-push-workflow:
     jobs:
