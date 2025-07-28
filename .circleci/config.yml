@@ -9,10 +9,6 @@ workflows:
   build_and_push_image:
     jobs:
       - docker/publish:
-          # Stellt sicher, dass das Image für beide Architekturen gebaut wird
-          archs:
-            - amd64
-            - arm64
           # Definiert den Namen und den Tag für das Docker-Image
           image: '${DOCKERHUB_USERNAME}/hellonodejs'
           tag: 'latest'
