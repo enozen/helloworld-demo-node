@@ -11,8 +11,8 @@ jobs:
       # Hapi 1: Merr kodin
       - checkout
 
-      # Hapi 2: NDEZ MOTORIN E DOCKER-IT (Ky është hapi që mungonte)
-      - docker/setup_remote_docker
+      # Hapi 2: Ndez motorin e Docker-it (Kjo është komanda e saktë)
+      - setup_remote_docker
 
       # Hapi 3: Bën login në Docker Hub
       - docker/check
