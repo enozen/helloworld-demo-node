@@ -8,19 +8,21 @@ jobs:
     executor: docker/docker
     resource_class: medium
     steps:
-      # Hapi 1: Merr kodin nga depoja
+      # Hapi 1: Merr kodin
       - checkout
 
-      # Hapi 2: Bën login në Docker Hub duke përdorur variablat e mjedisit
-      # KUJDES: Sigurohu që variablat në CircleCI quhen DOCKER_LOGIN dhe DOCKER_PASSWORD
+      # Hapi 2: NDEZ MOTORIN E DOCKER-IT (Ky është hapi që mungonte)
+      - docker/setup_remote_docker
+
+      # Hapi 3: Bën login në Docker Hub
       - docker/check
 
-      # Hapi 3: Ndërton imazhin Docker
+      # Hapi 4: Ndërton imazhin
       - docker/build:
           image: '${DOCKER_LOGIN}/hellonodejs'
           tag: 'latest'
 
-      # Hapi 4: Ngarkon imazhin në Docker Hub
+      # Hapi 5: Ngarkon imazhin
       - docker/push:
           image: '${DOCKER_LOGIN}/hellonodejs'
           tag: 'latest'
