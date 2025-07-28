@@ -1,0 +1,18 @@
+version: 2.1
+
+# Orbs sind wiederverwendbare Pakete, die komplexe Aufgaben vereinfachen
+orbs:
+  docker: circleci/docker@2.1.0
+
+# Workflows definieren die Abfolge von Jobs
+workflows:
+  build_and_push_image:
+    jobs:
+      - docker/publish:
+          # Stellt sicher, dass das Image für beide Architekturen gebaut wird
+          archs:
+            - amd64
+            - arm64
+          # Definiert den Namen und den Tag für das Docker-Image
+          image: '${DOCKERHUB_USERNAME}/hellonodejs'
+          tag: 'latest'
