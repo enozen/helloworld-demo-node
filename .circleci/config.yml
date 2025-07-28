@@ -10,5 +10,6 @@ workflows:
     jobs:
       - docker/publish:
           # Definiert den Namen und den Tag für das Docker-Image
+          resource_class: medium
           image: '${DOCKERHUB_USERNAME}/hellonodejs'
           tag: 'latest'
