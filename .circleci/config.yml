@@ -5,20 +5,24 @@ orbs:
 
 jobs:
   build-and-push-docker-image:
-    # Ky executor përgatit automatikisht një mjedis me Docker të instaluar
     executor: docker/docker
     resource_class: medium
     steps:
-      # Hapi 1: Merr kodin
+      # Hapi 1: Merr kodin nga depoja
       - checkout
 
-      # Hapi 2: Bën login në Docker Hub (HAPI I RËNDËSISHËM QË MUNGONTE)
-      # Kjo komandë përdor variablat e mjedisit DOCKERHUB_USERNAME dhe DOCKERHUB_TOKEN
+      # Hapi 2: Bën login në Docker Hub duke përdorur variablat e mjedisit
+      # KUJDES: Sigurohu që variablat në CircleCI quhen DOCKER_LOGIN dhe DOCKER_PASSWORD
       - docker/check
 
-      # Hapi 3: Ndërton dhe ngarkon imazhin
-      - docker/build-and-push:
-          image: '${DOCKERHUB_USERNAME}/hellonodejs'
+      # Hapi 3: Ndërton imazhin Docker
+      - docker/build:
+          image: '${DOCKER_LOGIN}/hellonodejs'
+          tag: 'latest'
+
+      # Hapi 4: Ngarkon imazhin në Docker Hub
+      - docker/push:
+          image: '${DOCKER_LOGIN}/hellonodejs'
           tag: 'latest'
 
 workflows:
